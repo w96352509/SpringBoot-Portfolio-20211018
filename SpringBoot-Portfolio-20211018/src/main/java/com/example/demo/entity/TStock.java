@@ -49,7 +49,7 @@ public class TStock {
     
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "classify_id", referencedColumnName = "id")
-    @JsonIgnoreProperties("tStocks")
+    @JsonIgnoreProperties("tStocks") //防止遞迴
     private Classify classify;
     
     public TStock() {
