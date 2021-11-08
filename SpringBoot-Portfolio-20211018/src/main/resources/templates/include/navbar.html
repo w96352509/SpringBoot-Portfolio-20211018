@@ -1,0 +1,64 @@
+<header xmlns:th="http://www.thymeleaf.org" th:fragment="navbar">
+<!-- Fixed navbar -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">
+					Hi <span th:text="${#session.getAttribute('investor_username')}"></span>
+				</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a th:href="@{/page/home}" href="#">Home</a></li>
+					<li><a th:href="@{/page/asset}" href="#">我的資產</a></li>
+					<li><a th:href="@{/page/watchlist}">商品行情報價</a></li>
+					<li><a th:href="@{/price/refresh}" target="price_refresh_frame">更新報價</a></li>
+				</ul>
+			
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">功能服務<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li>
+								<a th:href="@{/page/classify}" href="#">
+									<strong>Classify</strong> 商品分類
+								</a>
+							</li>
+							<hr />
+							<li>
+								<a th:href="@{/page/investor}">
+									<strong>Investor</strong> 投資人
+								</a>
+							</li>
+							<hr />
+							<li>
+								<a th:href="@{/page/tstock}">
+									<strong>TStock</strong> 股票、指數、匯率
+								</a>
+							</li>
+							<hr />
+							<li>
+								<a th:href="@{/page/watch}">
+									<strong>Watch</strong> 選擇觀察商品
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+	</nav>
+	<iframe id="price_refresh_frame" name="price_refresh_frame" height="0" width="0"></iframe>
+	<br />
+	<br />
+	<br />
+</header>
