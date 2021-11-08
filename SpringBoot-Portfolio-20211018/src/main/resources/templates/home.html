@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>portfolio 資料表關聯圖</title>
+<th:block th:include="./include/header :: header"></th:block>
+<style type="text/css">
+	.img-responsive {
+	  display: block;
+	  height: auto;
+	  max-width: 100%;
+	}
+</style>
+
+</head>
+<body>
+	<th:block th:include="./include/navbar :: navbar"></th:block>
+
+	<div class="container">
+		<h1>portfolio 資料表關聯圖</h1>
+      <img class="img-responsive" th:src="@{/images/portfolio_tables.png}" alt="看到我表示現在是破圖狀態" title="PSI 資料表關聯圖" />
+	</div>
+
+	<th:block th:include="./include/footer :: footer"></th:block>
+</body>
+</html>
