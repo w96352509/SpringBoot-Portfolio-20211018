@@ -26,7 +26,7 @@ public class Classify {
     @Column
     private Boolean tx; // transaction
     
-    @OneToMany(cascade=CascadeType.PERSIST, mappedBy="classify", fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.PERSIST, mappedBy="classify")
     @JsonIgnoreProperties("classify") //防止遞回
     private Set<TStock> tStocks;
 

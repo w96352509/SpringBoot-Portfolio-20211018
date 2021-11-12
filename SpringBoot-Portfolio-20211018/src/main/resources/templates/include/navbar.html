@@ -11,7 +11,7 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#">
-					HI
+					Hi <span th:text="${#session.getAttribute('investor_username')}"></span>
 				</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
@@ -48,12 +48,6 @@
 							<li>
 								<a th:href="@{/page/watch}">
 									<strong>Watch</strong> 選擇觀察商品
-								</a>
-							</li>
-							<hr />
-							<li>
-								<a th:href="@{/page/home}">
-									<strong>home</strong> 首頁
 								</a>
 							</li>
 						</ul>

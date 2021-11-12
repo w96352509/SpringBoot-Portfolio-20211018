@@ -51,7 +51,7 @@ public class ClassifyController {
 	
 	@PutMapping(value = {"/{id}", "/update/{id}"})
 	@Transactional
-	public Boolean update(@PathVariable("id") Integer id, @RequestBody Map<String, String> map) {
+	public Boolean update(@PathVariable("id") Integer id,@RequestBody Map<String, String> map) {
 		Classify classify = get(id);
 		classify.setName(map.get("name"));
 		if(map.get("tx") == null) {
@@ -62,7 +62,6 @@ public class ClassifyController {
 		classifyRepository.saveAndFlush(classify);
 		return true;
 	}
-	
 	@DeleteMapping(value = {"/{id}", "/delete/{id}"})
 	@Transactional
 	public Boolean delete(@PathVariable("id") Integer id) {

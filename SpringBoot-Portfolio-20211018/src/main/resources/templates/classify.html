@@ -5,100 +5,101 @@
 <title>Classify 商品分類</title>
 <th:block th:include="./include/header :: header"></th:block>
 <script>
-	$(document).ready(function() {
-		$("#add").on("click", function() {
-			var jsonObj = $('#myform').serializeObject();
+	$(document).ready(function(){
+		$("#add").on("click" , function(){
+			var jsonObj = $("#myform").serializeObject();
 			var jsonStr = JSON.stringify(jsonObj);
 			console.log(jsonStr);
-			$.ajax({
+			$.ajax({ //非同步資料快取
 				url: "/portfolio/classify/",
-				type: "POST",
-				contentType: "application/json;charset=utf-8",
-				data: jsonStr,
-				cache: false,
-				processData: false,
-				success: function(resp) {
+				type: "POST" ,
+				contentType: "application/json;charset=utf-8" ,
+				data: jsonStr , 
+				cache: false ,
+				processData : false ,
+				success: function(resp){
 					console.log(JSON.stringify(resp));
 					initPageSetup();
 				}
-			});
+			}); 
 		});
 		
-		$("#upt").on("click", function() {
-			var jsonObj = $('#myform').serializeObject();
+      $("#upt").on("click" , function(){
+			var jsonObj = $("#myform").serializeObject();
 			var jsonStr = JSON.stringify(jsonObj);
 			console.log(jsonStr);
-			$.ajax({
-				url: "/portfolio/classify/" + jsonObj.id,
-				type: "PUT",
-				contentType: "application/json;charset=utf-8",
-				data: jsonStr,
-				cache: false,
-				processData: false,
-				success: function(resp) {
+			$.ajax({ //非同步資料快取
+				url: "/portfolio/classify/"+jsonObj.id,
+				type: "PUT" ,
+				contentType: "application/json;charset=utf-8" ,
+				data: jsonStr , 
+				cache: false ,
+				processData : false ,
+				success: function(resp){
 					console.log(JSON.stringify(resp));
 					initPageSetup();
 				}
-			});
+			}); 
 		});
-		
-		$("#del").on("click", function() {
-			var id = $('#myform').find("#id").val();
-			$.ajax({
-				url: "/portfolio/classify/" + id,
-				type: "DELETE",
-				success: function(resp) {
+      
+      $("#del").on("click" , function(){
+			var id = $("#myform").find("#id").val();
+			$.ajax({ //非同步資料快取
+				url: "/portfolio/classify/"+id,
+				type: "DELETE" ,
+				success: function(resp){
 					console.log(JSON.stringify(resp));
 					initPageSetup();
 				}
-			});
+			}); 
 		});
 		
-		$("#myTable").on("click", "tr", function(){
-			var id = $(this).find('td').eq(0).text().trim();
+		//抓取欄位資訊
+		$("#myTable").on("click" , "tr", function(){
+			var id = $(this).find("td").eq(0).text().trim();
 			console.log(id);
-			var url = "/portfolio/classify/" + id;
-			$.get(url, function(data, status) {
+			var url="/portfolio/classify/"+id;
+			$.get(url,function(data , status){
 				console.log(JSON.stringify(data));
-				$('#add').attr('disabled',true);
-				$('#upt').attr('disabled',false);
-				$('#del').attr('disabled',false);
-				$('#myform').trigger('reset')//表單內容清空(重製)
-				
+				$('#add').attr('disabled', true);
+				$('#upt').attr('disabled', false);
+				$('#del').attr('disabled', false);
+				$("#myform").trigger('reset'); // 表單內容清空（重置）
 				$("#myform").find("#id").val(data.id);
 				$("#myform").find("#name").val(data.name);
-				$("#myform").find("#tx").prop('checked', data.tx);
+				$("#myform").find("#tx").prop('checked',data.tx);
 			});
 		});
 		
-		$("#rst").on("click",function(){
-			initPageSetup();
+		$("#rst").on("click", function() {
+			initPageSetup();		
 		});
-		//網路載入完成後所執行的另一個程式
+		// 網頁載入完成後所執行的第一個程式
 		initPageSetup();
 	});
 	
-	function initPageSetup() {
-		$('#add').attr('disabled',false);
-		$('#upt').attr('disabled',true);
-		$('#del').attr('disabled',true);
-		$('#myform').trigger('reset')//表單內容清空(重製)
+	function initPageSetup(){
+		$('#add').attr('disabled', false);
+		$('#upt').attr('disabled', true);
+		$('#del').attr('disabled', true);
+		$('#myform').trigger('reset'); // 表單內容清空（重置）
 		table_list();
 	}
-	
-	function table_list() {
-		$.get("/portfolio/classify/", function(datas, status) {
+	//共用方法
+	function table_list(){
+		$.get("/portfolio/classify/" ,function(datas , status){  //方法不同
 			console.log(datas);
 			console.log(status);
-			// 清除 tbody 的內容
-			$("#myTable tbody > tr").remove();
-			// 加入資料
-			$.each(datas, function(i, item) {
-				var html = "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>";
-				$("#myTable").append(String.format(html, item.id, item.name, item.tx));
-			});
+		    //清除 tbody 的內容	
+		    $("#myTable tbody > tr").remove();
+		    //加入資料
+		    $.each(datas , function(i , item){
+		    	var html = "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>";
+		    	$("#myTable").append(String.format(html , item.id,item.name,item.tx));
+		    });
 		});
-	}
+	}		
+	
 	
 </script>
 </head>

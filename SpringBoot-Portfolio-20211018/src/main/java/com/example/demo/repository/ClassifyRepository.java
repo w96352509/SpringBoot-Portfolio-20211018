@@ -12,10 +12,15 @@ import com.example.demo.entity.Classify;
 
 @Repository
 public interface ClassifyRepository extends JpaRepository<Classify , Integer>{
-  
+     //改變查詢 +  Modifying
 	@Transactional
 	@Modifying
 	@Query(value = "UPDATE Classify SET name=?2,tx=?3 WHERE id=?1", nativeQuery = true)
 	public void update(@Param("id") Integer id ,@Param("name") String name,@Param("tx") Boolean tx);
+
+	
+
+	
+
 	
 }

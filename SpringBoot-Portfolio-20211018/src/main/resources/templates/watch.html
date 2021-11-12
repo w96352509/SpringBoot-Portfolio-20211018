@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Watch</title>
+<th:block th:include="./include/header :: header"></th:block>
+
+<script>
+            var session_watch_id = '[[${#session.getAttribute("watch_id")}]]';
+            $(document).ready(function () {
+                $("#upt").on("click", function () {
+                    var jsonObj = $('#myform').serializeObject();
+                    var jsonStr = JSON.stringify(jsonObj);
+                    $.ajax({
+                        url: "/portfolio/watch/" + session_watch_id,
+                        type: "PUT",
+                        contentType: "application/json; charset=utf-8",
+                        data: jsonStr,
+                        cache: false,
+                        processData: false,
+                        success: function (resposeJsonObject) {
+                            table_list1();
+                        }
+                    });
+                });
+
+                $("#myTable1").on("click", "tr td:nth-child(5)", function () {
+                    var tstock_id = $(this).attr('tstock_id');
+                    if (confirm("是否要刪除？" + tstock_id)) {
+                        $.ajax({
+                            url: "/portfolio/watch/" + session_watch_id + "/remove/" + tstock_id,
+                            type: "DELETE",
+                            cache: false,
+                            processData: false,
+                            success: function (resposeJsonObject) {
+                                table_list1();
+                            }
+                        });
+                    }
+                });
+                
+                $("#myTable2").on("click", "tr td:nth-child(5)", function () {
+                    // 判斷該 tstock_id 是否已經加入 Watch ?
+                    var tstock_id = $(this).attr('tstock_id');
+                    var flag = true;
+                    if (watch != null && watch.tStocks != null) {
+                        $.each(watch.tStocks, function (i, item) {
+                            if (item.id == tstock_id) {
+                                alert(item.name + ' ' + item.symbol + ' 已加入！');
+                                flag = false;
+                                return;
+                            }
+                        });
+                    }
+                    if (flag && confirm("是否要增加？")) {
+                        $.ajax({
+                            url: "/portfolio/watch/" + session_watch_id + "/add/" + tstock_id,
+                            type: "GET",
+                            cache: false,
+                            processData: false,
+                            success: function (resposeJsonObject) {
+                                table_list1();
+                            }
+                        });
+                    }
+                });
+
+                // 資料列表(Watch List)
+                table_list1();
+                // 資料列表(TStock List)
+                table_list2();
+            });
+            
+            // 1. 透過 session_watch_id 找到 watch
+            // 2. 再透過 watch.tStocks 取得觀察股(tstock)資料
+            function table_list1() {
+                $.get("/portfolio/watch/" + session_watch_id, function (data, status) {
+                    console.log(JSON.stringify(data));
+                    $("#myform").find("#id").val(data.id);
+                    $("#myform").find("#name").val(data.name);
+                    watch = data; // 設定 watch 變數資料
+                    
+                    $("#myTable1 tbody > tr").remove();
+                    $.each(watch.tStocks, function (i, item) {
+                        var html = '<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td tstock_id="{4}">{5}</td></tr>';
+                        delbtn_html = '<button type="button" class="btn btn-danger">刪除</button>';
+                        $('#myTable1').append(String.format(html,
+                                item.id,
+                                item.name,
+                                item.symbol,
+                                item.classify.name,
+                                item.id,
+                                delbtn_html
+                                ));
+                    });
+                });
+            }
+            
+            // 取得所有 tstock 列表資料
+            function table_list2() {
+                $.get("/portfolio/tstock/", function (datas, status) {
+                    console.log(JSON.stringify(datas));
+                    $("#myTable2 tbody > tr").remove();
+                    $.each(datas, function (i, item) {
+                        var html = '<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td tstock_id="{4}">{5}</td></tr>';
+                        addbtn_html = '<button type="button" class="btn btn-success">新增</button>';
+
+                        $('#myTable2').append(String.format(html,
+                                item.id,
+                                item.name,
+                                item.symbol,
+                                item.classify.name,
+                                item.id,
+                                addbtn_html
+                                ));
+                    });
+                });
+            }
+        </script>
+
+</head>
+<body>
+	<th:block th:include="./include/navbar :: navbar"></th:block>
+	<div class="container">
+		<p />
+		<h1>Watch</h1>
+		<form id="myform" class="form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">ID</label>
+				<div class="col-sm-10">
+					<input id="id" value="0" name="id" placeholder="ID" readonly
+						class="form-control" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">名稱</label>
+				<div class="col-sm-10">
+					<input type="text" id="name" name="name" placeholder="分類名稱"
+						class="form-control" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button id="upt" type="button" class="btn btn-info">修改名稱</button>
+				</div>
+			</div>
+			
+		</form>
+		<p />
+		<h1>我的觀察股</h1>
+		<table id="myTable" border="1"
+			class="table table-striped table-responsive-md">
+			
+                    <td valign="top">    
+                        <div>
+                            <form>
+                                <fieldset>
+                                    <legend><h4>資料列表(Watch List)</h4></legend>
+                                    <table id="myTable1" class="table table-striped table-responsive-md">
+                                        <thead>
+                                            <tr>
+                                                <th>id</th>
+                                                <th>name</th>
+                                                <th>symbol</th>
+                                                <th>classify name</th>
+                                                <th>刪除</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        </tbody>
+                                    </table> 
+                                </fieldset>
+                            </form>
+                        </div>    
+                    </td>
+                    <td valign="top">    
+                        <div>
+                            <form>
+                                <fieldset>
+                                    <legend><h4>資料列表(TStock List)</h4></legend>
+                                    <table id="myTable2" class="table table-striped table-responsive-md">
+                                        <thead>
+                                            <tr>
+                                                <th>id</th>
+                                                <th>name</th>
+                                                <th>symbol</th>
+                                                <th>classify name</th>
+                                                <th>增加</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        </tbody>
+                                    </table> 
+                                </fieldset>
+                            </form>
+                        </div>    
+                    </td>
+		</table>
+	</div>
+
+	<th:block th:include="./include/footer :: footer"></th:block>
+	
+	
+</body>
+</html>
