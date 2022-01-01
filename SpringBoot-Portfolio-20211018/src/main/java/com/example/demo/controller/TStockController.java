@@ -40,11 +40,12 @@ public class TStockController {
         return ts;
     }
     
-    @PutMapping(value = {"/", "/update"})
+    @PutMapping(value = {"/{id}", "/update"})
     @Transactional
-    public TStock update(@RequestBody Map<String, String> map) {
+    public TStock update(@RequestBody Map<String, String> map,
+    		             @PathVariable("id") Integer id) {
         Classify classify = classifyRepository.findById(Integer.parseInt(map.get("classify_id"))).get();
-        TStock ts = tStockRepository.findById(Integer.parseInt(map.get("id"))).get();
+        TStock ts = tStockRepository.findById(id).get();
         ts.setName(map.get("name"));
         ts.setSymbol(map.get("symbol"));
         ts.setClassify(classify);

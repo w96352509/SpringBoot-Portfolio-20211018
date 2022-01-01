@@ -59,7 +59,7 @@ public class WatchController {
         TStock ts = tStockRepository.findById(tstock_id).get();
         watch.addtStock(ts);
         watchRepository.saveAndFlush(watch);
-        return get(id);
+        return watch;
     }
     
     @DeleteMapping(value = {"/{id}/remove/{tstock_id}"})

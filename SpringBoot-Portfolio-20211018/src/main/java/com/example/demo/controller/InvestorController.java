@@ -67,7 +67,7 @@ public class InvestorController {
     // 單筆刪除(根據 id)
     @DeleteMapping(value = {"/{id}"})
     @Transactional
-    public Boolean update(@PathVariable("id") Optional<Integer> id) {
+    public Boolean Delete(@PathVariable("id") Optional<Integer> id) {
         // 是否有 id
         if(!id.isPresent()) {
             return false;

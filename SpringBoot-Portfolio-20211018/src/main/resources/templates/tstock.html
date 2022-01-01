@@ -42,7 +42,7 @@
                     var jsonObj = $('#myform').serializeObject();
                     var jsonStr = JSON.stringify(jsonObj);
                     $.ajax({
-                        url: "/portfolio/tstock/",
+                        url: "/portfolio/tstock/"+jsonObj.id,
                         type: "PUT",
                         contentType: "application/json; charset=utf-8",
                         data: jsonStr, //Stringified Json Object
